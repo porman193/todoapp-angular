@@ -1,8 +1,14 @@
 import { Task } from './../../model/task.model';
-import { Component, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
+
+export enum FILTERS {
+  ALL = 'all',
+  COMPLETED = 'completed',
+  PENDING = 'pending'
+}
 
 @Component({
   selector: 'app-home',
@@ -12,7 +18,11 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 
 
+
+
 export class HomeComponent {
+
+  Filters=FILTERS;
 
   newTaskCtrl = new FormControl('',{
     nonNullable:true,
@@ -22,6 +32,7 @@ export class HomeComponent {
     ]
   });
 
+
   editInputCtlr = new FormControl('',{
     nonNullable:true,
     validators:[
@@ -30,14 +41,39 @@ export class HomeComponent {
     ]
   })
 
-  tasks = signal<Task[]>([
-    {
-      id:this.createId(),
-      title:"Create componet",
-      completed:false
-    }
-  ]);
+  tasks = signal<Task[]>([]);
 
+  filter = signal<FILTERS>(this.Filters.ALL)
+
+  tasksByFilter=computed(()=>{
+
+    const filter =this.filter();
+    const tasks = this.tasks();
+
+    if(filter === this.Filters.PENDING){
+      return tasks.filter(task => !task.completed)
+    }
+
+    if(filter === this.Filters.COMPLETED){
+      return tasks.filter(task => task.completed)
+    }
+
+    return tasks;
+  })
+
+  constructor(){
+    effect(()=>{
+      const tasks = this.tasks();
+      localStorage.setItem('task',JSON.stringify(tasks));
+    })
+  }
+
+  ngOnInit(){
+      const tasks = localStorage.getItem('task');
+      if(tasks){
+        this.tasks.set(JSON.parse(tasks))
+      }
+  }
 
 
   private createId(){
@@ -136,6 +172,11 @@ export class HomeComponent {
         }
       )
     }
+
+  }
+
+  changeFilter(filter:FILTERS){
+    this.filter.set(filter);
 
   }
 }

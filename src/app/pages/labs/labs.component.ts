@@ -9,6 +9,7 @@ import {signal} from '@angular/core';
   templateUrl: './labs.component.html',
   styleUrl: './labs.component.css'
 })
+
 export class LabsComponent {
   tasks = signal(["Install cli","create project","create components" ])
   name = signal("Andres");

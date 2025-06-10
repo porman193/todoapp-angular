@@ -1,0 +1,50 @@
+<div class="container">
+
+  <h1>Hello!!</h1>
+  <h2>Params</h2>
+  <hr />
+  <h2>{{"Hola".repeat(4)}}</h2>
+
+  <p>La suma de 3 +7 es :{{3+7}}</p>
+  <p>Hola soy {{name()}} y mi edad es {{age}} </p>
+
+  <hr/>
+  <input type="text" [value]="name()">
+  <button [disabled]="isDisabled">click me</button>
+  <img [src]="img" alt="">
+
+  <p>
+    person:{{person.name}} and age {{person.age}}
+  </p>
+  <img [src]="person.img" alt="">
+  <hr/>
+
+  <h2>Events</h2>
+  <button (click)="clickHandler()">even</button>
+  <hr/>
+  <button (dblclick)="clickHandler()">doble click</button>
+  <hr/>
+  <input type="text" name="name" id="name" (change)="inputHandler($event)">
+  <hr/>
+  <input type="text" (keydown)="keydownHandler($event)">
+  <hr/>
+  <input type="text" (keydown.shift.m)="clickHandler()">
+
+  <h2>Signals</h2>
+  <input type="text" [value]="name()" (change)="signalHandler($event)">
+  <p>Signal {{name()}}</p>
+
+  <hr/>
+  <h2>Controls structures</h2>
+  <ul>
+    <li *ngFor="let task of tasks(); index as i">
+      {{i}} - {{task}}
+    </li>
+    <p>Total: {{tasks().length}}</p>
+  </ul>
+
+  <hr/>
+  <input type="color" [formControl] = "colorCtrl">
+  <p>color: {{colorCtrl.value}}</p>
+
+</div>
